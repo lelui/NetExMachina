@@ -9,7 +9,8 @@ Original file is located at
 
 import torch
 #c=torch.device("cuda")
-x = torch.rand(100001,10000)
+print('brrrrr')
+x = torch.rand(10000,10000)
 w = torch.rand(10000, 50, requires_grad=True)
 
 y=x@w
