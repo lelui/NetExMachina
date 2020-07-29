@@ -8,10 +8,10 @@ Original file is located at
 """
 
 import torch
-#c=torch.device("cuda")
-print('brrrrr')
-x = torch.rand(10000,10000)
-w = torch.rand(10000, 50, requires_grad=True)
+c=torch.device("cuda")
+#print('brrrrr')
+x = torch.rand(10000,10000, device = c)
+w = torch.rand(10000, 50, requires_grad=True, device = c)
 
 y=x@w
 l = y.sum()
