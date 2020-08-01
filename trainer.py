@@ -88,13 +88,16 @@ class Trainer:
     
     def val_test(self):
         loss = []
+        labels_list = []
         with t.no_grad():
             for data in self._val_test_dl:
                 images, labels = data
+                labels_list.append(labels)
                 if self._cuda:
                     self._model.cuda()
                 loss.append(self.val_test_step(images,labels))
 
+        print(f1_score(labels, loss, average='macro'))
         avg = t.mean(t.tensor(loss))
         # set eval mode
         # disable gradient computation
@@ -110,7 +113,9 @@ class Trainer:
     
     def fit(self, epochs=-1):
         assert self._early_stopping_patience > 0 or epochs > 0
-        # create a list for the train and validation losses, and create a counter for the epoch 
+        # create a list for the train and validation losses, and create a counter for the epoch
+        train_loss = []
+        val_loss = []
         #TODO
         
         while True:
