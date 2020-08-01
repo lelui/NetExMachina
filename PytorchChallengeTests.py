@@ -35,8 +35,8 @@ class TestDataset(unittest.TestCase):
 
     def test_normalization(self):
         from data import ChallengeDataset
-
-        val_dl = t.utils.data.DataLoader(ChallengeDataset(self.tab, 'val'), batch_size=1)
+        x = ChallengeDataset(self.tab, 'val')
+        val_dl = t.utils.data.DataLoader(x, batch_size=1)
         a = 0.0
         s = np.zeros(3)
         s2 = np.zeros(3)

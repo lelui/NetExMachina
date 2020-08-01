@@ -1,6 +1,7 @@
 import torch as t
 from sklearn.metrics import f1_score
 from tqdm.autonotebook import tqdm
+import torch.nn as nn
 
 
 class Trainer:
@@ -49,34 +50,52 @@ class Trainer:
               dynamic_axes={'input' : {0 : 'batch_size'},    # variable lenght axes
                             'output' : {0 : 'batch_size'}})
             
-    def train_step(self, x, y):
-        # perform following steps:
-        # -reset the gradients
-        # -propagate through the network
-        # -calculate the loss
-        # -compute gradient by backward propagation
-        # -update weights
-        # -return the loss
-        #TODO
+    def train_step(self, inputs, labels):
+        #self._model.zero_grad()
+        self._optim.zero_grad()  # -reset the gradients
+        out = self._model.forward(inputs)  # -propagate through the network
+        loss = self._crit(out, labels)  # -calculate the loss
+        loss.backward()  # -compute gradient by backward propagation
+        self._optim.step()  # -update weights
+        return loss  # -return the loss
         
         
     
-    def val_test_step(self, x, y):
+    def val_test_step(self, input, labels):
         
         # predict
+        out = self._model.forward(input)  # -propagate through the network
+        loss = self._crit(out, labels)
         # propagate through the network and calculate the loss and predictions
         # return the loss and the predictions
         #TODO
+        return loss, out
         
     def train_epoch(self):
-        # set training mode
-        # iterate through the training set
-        # transfer the batch to "cuda()" -> the gpu if a gpu is given
-        # perform a training step
+        #self._train_dl.mode = 'train'  # set training mode
+        loss = []
+        for i, data in enumerate(self._train_dl, 0):  # iterate through the training set
+            inputs, labels = data
+            if self._cuda:
+                self._model.cuda()  # transfer the batch to "cuda()" -> the gpu if a gpu is given
+            loss.append(self.train_step(inputs, labels))  # perform a training step
+
+        avg = t.mean(t.tensor(loss))
+
         # calculate the average loss for the epoch and return it
+        return avg
         #TODO
     
     def val_test(self):
+        loss = []
+        with t.no_grad():
+            for data in self._val_test_dl:
+                images, labels = data
+                if self._cuda:
+                    self._model.cuda()
+                loss.append(self.val_test_step(images,labels))
+
+        avg = t.mean(t.tensor(loss))
         # set eval mode
         # disable gradient computation
         # iterate through the validation set
@@ -86,6 +105,7 @@ class Trainer:
         # calculate the average loss and average metrics of your choice. You might want to calculate these metrics in designated functions
         # return the loss and print the calculated metrics
         #TODO
+        return avg
         
     
     def fit(self, epochs=-1):
@@ -94,7 +114,7 @@ class Trainer:
         #TODO
         
         while True:
-      
+            a=1
             # stop by epoch number
             # train for a epoch and then calculate the loss and metrics on the validation set
             # append the losses to the respective lists
@@ -102,6 +122,7 @@ class Trainer:
             # check whether early stopping should be performed using the early stopping criterion and stop if so
             # return the losses for both training and validation
         #TODO
+        return
                     
         
         
