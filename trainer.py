@@ -54,7 +54,7 @@ class Trainer:
         #self._model.zero_grad()
         self._optim.zero_grad()  # -reset the gradients
         out = self._model.forward(inputs)  # -propagate through the network
-        loss = self._crit(out, labels)  # -calculate the loss
+        loss = self._crit(out, labels.float())  # -calculate the loss
         loss.backward()  # -compute gradient by backward propagation
         self._optim.step()  # -update weights
         return loss  # -return the loss
@@ -84,8 +84,7 @@ class Trainer:
 
         # calculate the average loss for the epoch and return it
         return avg
-        #TODO
-    
+
     def val_test(self):
         loss = []
         labels_list = []
@@ -107,7 +106,6 @@ class Trainer:
         # save the predictions and the labels for each batch
         # calculate the average loss and average metrics of your choice. You might want to calculate these metrics in designated functions
         # return the loss and print the calculated metrics
-        #TODO
         return avg
         
     
@@ -116,10 +114,25 @@ class Trainer:
         # create a list for the train and validation losses, and create a counter for the epoch
         train_loss = []
         val_loss = []
-        #TODO
-        
+        counter = 0
+        break_counter = 0
+        lowest = 0
         while True:
-            a=1
+            if counter > epochs:
+                print('out of epochs')
+                break
+            counter = counter+1
+            train_loss.append(self.train_epoch())
+            val_loss.append(self.val_test())
+            contestant = val_loss[counter]
+            if contestant > lowest:
+                break_counter = break_counter+1
+            else:
+                lowest = contestant
+                break_counter = 0
+            if break_counter == 5:
+                print('verbessert sich nicht')
+                break
             # stop by epoch number
             # train for a epoch and then calculate the loss and metrics on the validation set
             # append the losses to the respective lists
@@ -127,7 +140,7 @@ class Trainer:
             # check whether early stopping should be performed using the early stopping criterion and stop if so
             # return the losses for both training and validation
         #TODO
-        return
+        return train_loss, val_loss
                     
         
         

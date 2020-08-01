@@ -16,7 +16,7 @@ class ChallengeDataset(Dataset):
         self.data = data
         self.mode = mode
         t = tv.transforms.Normalize((train_mean[0], train_mean[1], train_mean[2]), (train_std[0], train_std[1], train_std[2]))
-        self._transform = tv.transforms.Compose([ tv.transforms.ToTensor(), t])
+        self._transform = tv.transforms.Compose([tv.transforms.ToTensor(), t])
         #self._transform = torch.
         return
 
@@ -24,12 +24,12 @@ class ChallengeDataset(Dataset):
         return len(self.data)
 
     def __getitem__(self, index):
-        csvthing = pd.read_csv('data.csv')
+        csvthing = self.data
         img_name = csvthing.iloc[index]
         img_name = img_name[0]
         randolist = img_name.split(';')
-        img_name = randolist[0]
-        image = imread(img_name)
+        #img_name = randolist[0]
+        image = imread(randolist[0])
         image = gray2rgb(image)
         #image = image.reshape((3,300,300))
         #image = torch.tensor(image)
