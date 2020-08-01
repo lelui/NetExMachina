@@ -65,7 +65,7 @@ class Trainer:
         
         # predict
         out = self._model.forward(input)  # -propagate through the network
-        loss = self._crit(out, labels)
+        loss = self._crit(out, labels.float())
         # propagate through the network and calculate the loss and predictions
         # return the loss and the predictions
         #TODO
