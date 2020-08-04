@@ -2,7 +2,7 @@ import torch as t
 from sklearn.metrics import f1_score
 from tqdm.autonotebook import tqdm
 import torch.nn as nn
-
+import numpy as np
 
 class Trainer:
 
@@ -86,16 +86,21 @@ class Trainer:
     def val_test(self):
         loss = []
         labels_list = []
+        pred_list = []
         with t.no_grad():
             for data in self._val_test_dl:
                 images, labels = data
                 labels_list.append(labels)
                 if self._cuda:
                     self._model.cuda()
-                loss.append(self.val_test_step(images, labels)[0])
+                abc = self.val_test_step(images, labels)
+                loss.append(abc[0])
+                pred_list.append(np.where(abc[1].cpu() > 0.5, 1, 0))
+
+
         # print(labels)
         # print(loss)
-        # print(f1_score(labels_list, loss, average='macro'))
+        print(f1_score(np.array(labels_list), np.array(pred_list), average='macro'))
         avg = t.mean(t.tensor(loss))
         # set eval mode
         # disable gradient computation
@@ -135,7 +140,7 @@ class Trainer:
             if new_count == self._early_stopping_patience:
                 print('verbessert sich nicht')
                 return train_loss, val_loss
-            print(train_loss[counter], val_loss[counter])
+            #print(train_loss[counter], val_loss[counter])
             counter = counter + 1
             # stop by epoch number
             # train for a epoch and then calculate the loss and metrics on the validation set
