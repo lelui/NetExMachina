@@ -90,7 +90,7 @@ class Trainer:
         with t.no_grad():
             for data in self._val_test_dl:
                 images, labels = data
-                labels_list.append(labels)
+                labels_list.append(labels.cpu())
                 if self._cuda:
                     self._model.cuda()
                 abc = self.val_test_step(images, labels)
@@ -100,7 +100,7 @@ class Trainer:
 
         # print(labels)
         # print(loss)
-        print(f1_score(np.array(labels_list), np.array(pred_list), average='macro'))
+        print(f1_score(np.concatenate(labels_list), np.concatenate(pred_list), average='macro'))
         avg = t.mean(t.tensor(loss))
         # set eval mode
         # disable gradient computation
