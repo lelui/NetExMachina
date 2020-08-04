@@ -28,7 +28,7 @@ netexmachina = model.ResNet()
 loss_crit = crit = t.nn.BCELoss()
 optim = t.optim.Adam(netexmachina.parameters(), lr=0.01)
 patience = 5
-AshKetchum = Trainer(netexmachina, loss_crit, optim, train_dl=train_loader, val_test_dl=test_loader, cuda=True, early_stopping_patience=5)
+AshKetchum = Trainer(netexmachina, loss_crit, optim, train_dl=train_loader, val_test_dl=test_loader, cuda=True, early_stopping_patience=15)
 # go, go, go... call fit on trainer
 res = AshKetchum.fit(100)#TODO
 
