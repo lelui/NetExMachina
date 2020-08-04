@@ -125,7 +125,7 @@ class Trainer:
             if counter == 0:
                 lowest = val_loss[counter]
             else:
-                if lowest > val_loss[counter]:
+                if lowest < val_loss[counter]:
                     print(lowest,'Higher than', val_loss[counter])
                     new_count += 1
                 else:
