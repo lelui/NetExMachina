@@ -16,7 +16,10 @@ class ChallengeDataset(Dataset):
         self.data = data
         self.mode = mode
         t = tv.transforms.Normalize((train_mean[0], train_mean[1], train_mean[2]), (train_std[0], train_std[1], train_std[2]))
-        self._transform = tv.transforms.Compose([tv.transforms.ToTensor(), t])
+        if mode == 'train':
+            self._transform = tv.transforms.Compose([tv.transforms.ToTensor(), t, tv.transforms.RandomVerticalFlip(p=0.5)])
+        else:
+            self._transform = tv.transforms.Compose([tv.transforms.ToTensor(), t])
         #self._transform = torch.
         return
 

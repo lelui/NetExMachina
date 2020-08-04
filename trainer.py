@@ -130,7 +130,7 @@ class Trainer:
             else:
                 lowest = contestant
                 break_counter = 0
-            if break_counter == 5:
+            if break_counter == self._early_stopping_patience:
                 print('verbessert sich nicht')
                 return train_loss, val_loss
             print(train_loss[counter], val_loss[counter])
