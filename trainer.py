@@ -113,8 +113,8 @@ class Trainer:
         train_loss = []
         val_loss = []
         counter = 0
-        break_counter = 0
-        lowest = 0
+        break_flag = False
+        new_count = 0
         while True:
             if counter >= epochs:
                 print('out of epochs')
@@ -122,15 +122,15 @@ class Trainer:
 
             train_loss.append(self.train_epoch())
             val_loss.append(self.val_test())
-            contestant = val_loss[counter]
-            if lowest == 0:
-                lowest = contestant
-            if contestant < lowest:
-                break_counter = break_counter + 1
+            if counter == 0:
+                lowest = val_loss[counter]
             else:
-                lowest = contestant
-                break_counter = 0
-            if break_counter == self._early_stopping_patience:
+                if lowest > val_loss[counter]:
+                    new_count += 1
+                else:
+                    lowest = val_loss[counter]
+                    new_count = 0
+            if new_count == self._early_stopping_patience:
                 print('verbessert sich nicht')
                 return train_loss, val_loss
             print(train_loss[counter], val_loss[counter])
