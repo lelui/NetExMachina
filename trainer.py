@@ -126,8 +126,10 @@ class Trainer:
                 lowest = val_loss[counter]
             else:
                 if lowest > val_loss[counter]:
+                    print(lowest,'Higher than', val_loss[counter])
                     new_count += 1
                 else:
+                    print('lower')
                     lowest = val_loss[counter]
                     new_count = 0
             if new_count == self._early_stopping_patience:
