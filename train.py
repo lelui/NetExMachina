@@ -26,7 +26,7 @@ netexmachina = model.ResNet()
 # set up the optimizer (see t.optim)
 # create an object of type Trainer and set its early stopping criterion
 loss_crit = crit = t.nn.BCELoss()
-optim = t.optim.Adam(netexmachina.parameters(), lr=0.02)
+optim = t.optim.Adam(netexmachina.parameters(), lr=0.0001)
 patience = 5
 AshKetchum = Trainer(netexmachina, loss_crit, optim, train_dl=train_loader, val_test_dl=test_loader, cuda=True, early_stopping_patience=7)
 # go, go, go... call fit on trainer
