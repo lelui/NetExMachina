@@ -141,6 +141,7 @@ class Trainer:
                 print('verbessert sich nicht')
                 return train_loss, val_loss
             #print(train_loss[counter], val_loss[counter])
+            self.save_checkpoint(counter)
             counter = counter + 1
             # stop by epoch number
             # train for a epoch and then calculate the loss and metrics on the validation set

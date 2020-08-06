@@ -15,12 +15,16 @@ class ChallengeDataset(Dataset):
     def __init__(self, data, mode):
         self.data = data
         self.mode = mode
-        t = tv.transforms.Normalize((train_mean[0], train_mean[1], train_mean[2]), (train_std[0], train_std[1], train_std[2]))
+        t = tv.transforms.Normalize((train_mean[0], train_mean[1], train_mean[2]),
+                                    (train_std[0], train_std[1], train_std[2]))
         if mode == 'train':
-            self._transform = tv.transforms.Compose([tv.transforms.ToTensor(), t, tv.transforms.RandomVerticalFlip(p=0.5)])
+            self._transform = tv.transforms.Compose(
+                [tv.transforms.ToTensor(), t, tv.transforms.RandomVerticalFlip(p=0.5), tv.transforms.RandomHorizontalFlip(p=0.5)])
         else:
             self._transform = tv.transforms.Compose([tv.transforms.ToTensor(), t])
-        #self._transform = torch.
+        # , tv.transforms.ColorJitter(brightness=0, contrast=0, saturation=0, hue=0)
+        # , tv.transforms.ToPILImage()
+        # , tv.transforms.RandomRotation((90,90), resample=False, expand=False, center=None, fill=None)
         return
 
     def __len__(self):
